@@ -22,7 +22,7 @@ function UpdatedAt() {
   });
 
   let updatedAtText = "Carregando...";
-  console.log(data);
+
   if (!isLoading && data) {
     updatedAtText = new Date(data.updated_at).toLocaleString("pt-br");
   }
