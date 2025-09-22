@@ -31,7 +31,7 @@ describe("POST /api/v1/migrations", () => {
         const response2Body = await response2.json();
 
         expect(Array.isArray(response2Body)).toBe(true);
-        expect(response2Body.length).toEqual(0);
+        expect(response2Body.length).toBe(0);
       });
     });
   });
