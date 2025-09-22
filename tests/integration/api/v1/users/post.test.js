@@ -37,7 +37,7 @@ describe("POST /api/v1/users", () => {
         updated_at: responseBody.updated_at,
       });
 
-      expect(uuidVersion(responseBody.id)).toEqual(4);
+      expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
