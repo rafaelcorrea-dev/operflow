@@ -32,13 +32,44 @@ async function create(userInputValues) {
   }
 }
 
+async function findOneById(id) {
+  const userFound = await runSelectQuery(id);
+
+  return userFound;
+
+  async function runSelectQuery(id) {
+    const results = await database.query({
+      text: `
+      SELECT
+        *
+      FROM
+        users
+      WHERE
+        id = $1
+      LIMIT
+        1
+    ;`,
+      values: [id],
+    });
+
+    if (results.rowCount === 0) {
+      throw new NotFoundError({
+        message: "O id informado não foi encontrado no sistema.",
+        action: "Verifique se o id está digitado corretamente.",
+      });
+    }
+
+    return results.rows[0];
+  }
+}
+
 async function findOneByUsername(username) {
   const userFound = await runSelectQuery(username);
 
   return userFound;
 
   async function runSelectQuery(username) {
-    const result = await database.query({
+    const results = await database.query({
       text: `
       SELECT
         *
@@ -52,13 +83,13 @@ async function findOneByUsername(username) {
       values: [username],
     });
 
-    if (result.rowCount === 0) {
+    if (results.rowCount === 0) {
       throw new NotFoundError({
         message: "O username informado não foi encontrado no sistema.",
         action: "Verifique se o username está digitado corretamente.",
       });
     }
-    return result.rows[0];
+    return results.rows[0];
   }
 }
 
@@ -68,7 +99,7 @@ async function findOneByEmail(email) {
   return userFound;
 
   async function runSelectQuery(email) {
-    const result = await database.query({
+    const results = await database.query({
       text: `
       SELECT
         *
@@ -82,14 +113,14 @@ async function findOneByEmail(email) {
       values: [email],
     });
 
-    if (result.rowCount === 0) {
+    if (results.rowCount === 0) {
       throw new NotFoundError({
         message: "O email informado não foi encontrado no sistema.",
         action: "Verifique se o email está digitado corretamente.",
       });
     }
 
-    return result.rows[0];
+    return results.rows[0];
   }
 }
 
@@ -193,6 +224,7 @@ async function hashPasswordInObject(userInputValues) {
 
 const user = {
   create,
+  findOneById,
   findOneByUsername,
   findOneByEmail,
   update,
