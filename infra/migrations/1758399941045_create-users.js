@@ -26,6 +26,12 @@ exports.up = (pgm) => {
       notNull: true,
     },
 
+    features: {
+      type: "varchar[]",
+      notNull: true,
+      default: "{}",
+    },
+
     // Why timestamp with timezone? https://justatheory.com/2012/04/postgres-use-timestamptz/
     created_at: {
       type: "timestamptz",
