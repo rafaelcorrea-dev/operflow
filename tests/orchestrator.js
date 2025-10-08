@@ -1,6 +1,6 @@
 import retry from "async-retry";
 import { faker } from "@faker-js/faker";
-import database from "infra/database";
+import database from "infra/database.js";
 import migrator from "models/migrator.js";
 import user from "models/user.js";
 import session from "models/session.js";
@@ -76,6 +76,10 @@ async function getLastEmail() {
 
   const lastEmailItem = emailListBody.pop();
 
+  if (!lastEmailItem) {
+    return null;
+  }
+
   const emailTextResponse = await fetch(
     `${emailHttpUrl}/messages/${lastEmailItem.id}.plain`,
   );
@@ -86,6 +90,7 @@ async function getLastEmail() {
 
   return lastEmailItem;
 }
+
 const orchestrator = {
   waitForAllServices,
   clearDatabase,
