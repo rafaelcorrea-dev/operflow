@@ -1,3 +1,5 @@
+/* global Set */
+
 const availableFeatures = new Set([
   // USER
   "create:user",

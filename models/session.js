@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+
 import database from "infra/database.js";
 import { UnauthorizedError } from "infra/errors.js";
 
