@@ -14,7 +14,7 @@ async function create(userInputValues) {
 
   async function runInsertQuery(userInputValues) {
     const results = await database.query({
-      text: ` 
+      text: `
       INSERT INTO
         users (username, email, password, features)
       VALUES
@@ -181,7 +181,7 @@ async function update(username, userInputValues) {
 
 async function validateUniqueUsername(username) {
   const results = await database.query({
-    text: ` 
+    text: `
     SELECT
       username
     FROM
@@ -203,7 +203,7 @@ async function validateUniqueUsername(username) {
 
 async function validateUniqueEmail(email) {
   const results = await database.query({
-    text: ` 
+    text: `
     SELECT
       email
     FROM
@@ -253,6 +253,12 @@ async function hashPasswordInObject(userInputValues) {
   userInputValues.password = hashPassword;
 }
 
+function createAnonymous() {
+  return {
+    features: ["read:activation_token", "create:session", "create:user"],
+  };
+}
+
 const user = {
   create,
   findOneById,
@@ -260,6 +266,7 @@ const user = {
   findOneByEmail,
   update,
   setFeatures,
+  createAnonymous,
 };
 
 export default user;

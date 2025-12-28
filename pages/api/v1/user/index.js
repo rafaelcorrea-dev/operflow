@@ -1,11 +1,14 @@
 import { createRouter } from "next-connect";
+
 import controller from "infra/controller.js";
+import middleware from "middlewares/middleware.js";
 import session from "models/session.js";
 import user from "models/user.js";
 
 const router = createRouter();
 
-router.get(getHandler);
+router.use(middleware.authentication.injectAnonymousOrUser);
+router.get(middleware.authorization.canRequest("read:session"), getHandler);
 
 export default router.handler(controller.errorHandlers);
 

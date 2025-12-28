@@ -3,6 +3,42 @@
     "eslint:recommended",
     "plugin:jest/recommended",
     "prettier",
-    "next/core-web-vitals"
-  ]
+    "next/core-web-vitals",
+    "plugin:import/recommended"
+  ],
+  "plugins": ["import"],
+  "rules": {
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "newlines-between": "always",
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
+      }
+    ],
+    "import/newline-after-import": ["error", { "count": 1 }],
+
+    "import/extensions": [
+      "error",
+      "always",
+      {
+        "ignorePackages": true
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["."],
+        "extensions": [".js"]
+      }
+    }
+  }
 }

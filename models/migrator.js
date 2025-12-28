@@ -1,5 +1,7 @@
-import migrationRunner from "node-pg-migrate";
 import { resolve } from "node:path";
+
+import migrationRunner from "node-pg-migrate";
+
 import database from "infra/database.js";
 
 const defaultMigrationsOptions = {

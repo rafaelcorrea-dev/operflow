@@ -1,4 +1,5 @@
 import { Client } from "pg";
+
 import { ServiceError } from "infra/errors.js";
 
 async function query(queryObject) {
