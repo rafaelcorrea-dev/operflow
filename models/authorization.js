@@ -2,24 +2,24 @@ import { ValidationError } from "infra/errors.js";
 import availableFeatures from "models/user-features.js";
 
 function can(user, feature, resource) {
+  let authorized = false;
+
   validateUser(user);
   validateFeature(feature);
 
-  if (!user.features.includes(feature)) return false;
+  if (user.features.includes(feature)) {
+    authorized = true;
+  }
 
-  // switch (feature) {
-  //   case "update:user":
-  //     return resource?.id && user.id === resource.id;
-  //   case "update:content":
-  //     return (
-  //       (resource?.owner_id && user.id === resource.owner_id) ||
-  //       user.features.includes("update:content:others")
-  //     );
-  // }
+  if (feature === "update:user" && resource) {
+    authorized = false;
 
-  if (!resource) return true;
+    if (user.id === resource.id) {
+      authorized = true;
+    }
+  }
 
-  return false;
+  return authorized;
 }
 
 function validateUser(user) {
