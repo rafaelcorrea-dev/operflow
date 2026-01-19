@@ -7,15 +7,15 @@ function can(user, feature, resource) {
 
   if (!user.features.includes(feature)) return false;
 
-  switch (feature) {
-    case "update:user":
-      return resource?.id && user.id === resource.id;
-    case "update:content":
-      return (
-        (resource?.owner_id && user.id === resource.owner_id) ||
-        user.features.includes("update:content:others")
-      );
-  }
+  // switch (feature) {
+  //   case "update:user":
+  //     return resource?.id && user.id === resource.id;
+  //   case "update:content":
+  //     return (
+  //       (resource?.owner_id && user.id === resource.owner_id) ||
+  //       user.features.includes("update:content:others")
+  //     );
+  // }
 
   if (!resource) return true;
 
