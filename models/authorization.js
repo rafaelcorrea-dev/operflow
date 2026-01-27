@@ -57,8 +57,21 @@ function validateFeature(feature) {
   }
 }
 
+function filterOutput(user, feature, insecureValues) {
+  if (feature === "read:user") {
+    return {
+      id: insecureValues.id,
+      username: insecureValues.username,
+      features: insecureValues.features,
+      created_at: insecureValues.created_at,
+      updated_at: insecureValues.updated_at,
+    };
+  }
+}
+
 const authorization = Object.freeze({
   can,
+  filterOutput,
 });
 
 export default authorization;
