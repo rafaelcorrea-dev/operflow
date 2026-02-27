@@ -3,6 +3,7 @@ import { createRouter } from "next-connect";
 import controller from "infra/controller.js";
 import middleware from "middlewares/middleware.js";
 import activation from "models/activation.js";
+import authorization from "models/authorization.js";
 
 const router = createRouter();
 
@@ -15,6 +16,7 @@ router.patch(
 export default router.handler(controller.errorHandlers);
 
 async function patchHandler(request, response) {
+  const userTryingToPatch = request.context.user;
   const activationTokenId = request.query.token_id;
 
   // Refatorar em uma única query pra deixar atômica e com transaction
@@ -26,5 +28,11 @@ async function patchHandler(request, response) {
   const usedActivationToken =
     await activation.markTokenAsUsed(activationTokenId);
 
-  return response.status(200).json(usedActivationToken);
+  const secureOutputValues = authorization.filterOutput(
+    userTryingToPatch,
+    "read:activation_token",
+    usedActivationToken,
+  );
+
+  return response.status(200).json(secureOutputValues);
 }

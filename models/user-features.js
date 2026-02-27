@@ -24,6 +24,10 @@ const availableFeatures = new Set([
   "create:session",
   "read:session",
 
+  // STATUS
+  "read:status",
+  "read:status:all",
+
   // CONTENT
   "read:content",
   "update:content",
