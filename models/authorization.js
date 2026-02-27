@@ -1,4 +1,4 @@
-import { ValidationError } from "infra/errors.js";
+import { InternalServerError } from "infra/errors.js";
 import availableFeatures from "models/user-features.js";
 
 function can(user, feature, resource) {
@@ -22,42 +22,11 @@ function can(user, feature, resource) {
   return authorized;
 }
 
-function validateUser(user) {
-  if (!user) {
-    throw new ValidationError({
-      message: `Nenhum "user" foi especificado para a ação de autorização.`,
-      action: `Contate o suporte informado o campo "errorId".`,
-    });
-  }
-
-  if (!user.features || !Array.isArray(user.features)) {
-    throw new ValidationError({
-      message: `"user" não possui "features" ou não é um array.`,
-      action: `Contate o suporte informado o campo "errorId".`,
-    });
-  }
-}
-
-function validateFeature(feature) {
-  if (!feature) {
-    throw new ValidationError({
-      message: `Nenhuma "feature" foi especificada para a ação de autorização.`,
-      action: `Contate o suporte informado o campo "errorId".`,
-    });
-  }
-
-  if (!availableFeatures.has(feature)) {
-    throw new ValidationError({
-      message: `A feature utilizada não está disponível na lista de features existentes.`,
-      action: `Contate o suporte informado o campo "errorId".`,
-      context: {
-        feature: feature,
-      },
-    });
-  }
-}
-
 function filterOutput(user, feature, resource) {
+  validateUser(user);
+  validateFeature(feature);
+  validateResource(resource);
+
   if (feature === "read:user") {
     return {
       id: resource.id,
@@ -132,6 +101,47 @@ function filterOutput(user, feature, resource) {
     }
 
     return output;
+  }
+}
+
+function validateUser(user) {
+  if (!user) {
+    throw new InternalServerError({
+      cause: "É necessário fornecer `user` no model `authorization`.",
+    });
+  }
+
+  if (!user.features || !Array.isArray(user.features)) {
+    throw new InternalServerError({
+      cause: '"user" não possui "features" ou não é um array.',
+    });
+  }
+}
+
+function validateFeature(feature) {
+  if (!feature) {
+    throw new InternalServerError({
+      cause: "É necessário fornecer uma `feature` model `authorization`.",
+    });
+  }
+
+  if (!availableFeatures.has(feature)) {
+    throw new InternalServerError({
+      cause:
+        "A feature utilizada não está disponível na lista de features existentes.",
+      context: {
+        feature: feature,
+      },
+    });
+  }
+}
+
+function validateResource(resource) {
+  if (!resource) {
+    throw new InternalServerError({
+      cause:
+        "É necessário fornecer um `resource` no `authorization.filterOutput()`.",
+    });
   }
 }
 
