@@ -111,7 +111,7 @@ describe("Use case: Registration Flow (all successfull)", () => {
   });
 
   test("Get user information", async () => {
-    const userResponse = await fetch("http://localhost:3000/api/v1/user", {
+    const userResponse = await fetch(`${webserver.origin}/api/v1/user`, {
       headers: {
         cookie: `session_id=${createdSessionResponseBody.token}`,
       },
