@@ -5,15 +5,13 @@ import middleware from "middlewares/middleware.js";
 import activation from "models/activation.js";
 import authorization from "models/authorization.js";
 
-const router = createRouter();
-
-router.use(middleware.authentication.injectAnonymousOrUser);
-router.patch(
-  middleware.authorization.canRequest("read:activation_token"),
-  patchHandler,
-);
-
-export default router.handler(controller.errorHandlers);
+export default createRouter()
+  .use(middleware.authentication.injectAnonymousOrUser)
+  .patch(
+    middleware.authorization.canRequest("read:activation_token"),
+    patchHandler,
+  )
+  .handler(controller.errorHandlers);
 
 async function patchHandler(request, response) {
   const userTryingToPatch = request.context.user;

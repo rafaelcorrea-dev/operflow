@@ -5,16 +5,11 @@ import middleware from "middlewares/middleware.js";
 import authorization from "models/authorization.js";
 import migrator from "models/migrator.js";
 
-const router = createRouter();
-
-router.use(middleware.authentication.injectAnonymousOrUser);
-router.get(middleware.authorization.canRequest("read:migration"), getHandler);
-router.post(
-  middleware.authorization.canRequest("create:migration"),
-  postHandler,
-);
-
-export default router.handler(controller.errorHandlers);
+export default createRouter()
+  .use(middleware.authentication.injectAnonymousOrUser)
+  .get(middleware.authorization.canRequest("read:migration"), getHandler)
+  .post(middleware.authorization.canRequest("create:migration"), postHandler)
+  .handler(controller.errorHandlers);
 
 async function getHandler(request, response) {
   const userTryingToGet = request.context.user;

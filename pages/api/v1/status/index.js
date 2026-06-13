@@ -5,12 +5,10 @@ import database from "infra/database.js";
 import middleware from "middlewares/middleware.js";
 import authorization from "models/authorization.js";
 
-const router = createRouter();
-
-router.use(middleware.authentication.injectAnonymousOrUser);
-router.get(getHandler);
-
-export default router.handler(controller.errorHandlers);
+export default createRouter()
+  .use(middleware.authentication.injectAnonymousOrUser)
+  .get(getHandler)
+  .handler(controller.errorHandlers);
 
 async function getHandler(request, response) {
   const userTryingToGet = request.context.user;

@@ -6,13 +6,11 @@ import middleware from "middlewares/middleware.js";
 import authorization from "models/authorization.js";
 import user from "models/user.js";
 
-const router = createRouter();
-
-router.use(middleware.authentication.injectAnonymousOrUser);
-router.get(getHandler);
-router.patch(middleware.authorization.canRequest("update:user"), patchHandler);
-
-export default router.handler(controller.errorHandlers);
+export default createRouter()
+  .use(middleware.authentication.injectAnonymousOrUser)
+  .get(getHandler)
+  .patch(middleware.authorization.canRequest("update:user"), patchHandler)
+  .handler(controller.errorHandlers);
 
 async function getHandler(request, response) {
   const userTryingToGet = request.context.user;
