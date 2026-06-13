@@ -6,12 +6,10 @@ import authorization from "models/authorization.js";
 import session from "models/session.js";
 import user from "models/user.js";
 
-const router = createRouter();
-
-router.use(middleware.authentication.injectAnonymousOrUser);
-router.get(middleware.authorization.canRequest("read:session"), getHandler);
-
-export default router.handler(controller.errorHandlers);
+export default createRouter()
+  .use(middleware.authentication.injectAnonymousOrUser)
+  .get(middleware.authorization.canRequest("read:session"), getHandler)
+  .handler(controller.errorHandlers);
 
 async function getHandler(request, response) {
   const userTryingToGet = request.context.user;
